@@ -8,3 +8,4 @@ Pillow==10.1.0
 scipy==1.11.3
 scikit-image==0.22.0
 tensorflow==2.14.0
+pyinstaller==6.1.0
