@@ -1,6 +1,6 @@
 # TEM GUI LESC
 
-## Steps to create the Windows Executable
+## Steps to create the Windows executable file
 
 1. Clone the repository into a directory of your choice
 
@@ -37,3 +37,5 @@ pip install -r requirements.txt
 ```
 pyinstaller --add-data "dm3;dm3" --add-data "database.csv;." --add-data "factor.csv;." --add-data "FFTmodelv1.hdf5;." --add-data "logo.png;." --onefile --noconsole GUI_Final.py
 ```
+
+7. Navigate to the `dist` directory in the project folder to see the executable file.
