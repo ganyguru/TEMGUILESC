@@ -27,7 +27,7 @@ import skimage
 from skimage.transform import resize
 from scipy import ndimage as nd
 import pandas as pd
-import tkinter
+import time
 from tkinter import *
 from tkinter.ttk import *
 
@@ -140,9 +140,7 @@ class Application(tk.Frame):
         # button.destroy() or button.pack_forget()
         label = Label(root, text= content)
         #this creates a new label to the GUI
-        label.pack() 
-
-
+        label.pack()
     
     def batch_process(self):
         results = []
@@ -159,11 +157,16 @@ class Application(tk.Frame):
 
 
         for file in os.listdir(resourcePath("dm3")):
+            start = time.time()
             if file.endswith(".dm3") or file.endswith(".dm4"):
                 print(file+" Processing started...")
                 final_file = "processed_dm3/"+file.split(".")[0]
+                i = 0
                 while(path.exists(final_file)):
-                    final_file = "processed_dm3/"+final_file.split("_dm3/")[1]+"_1"
+                    if i > 0: 
+                        final_file = final_file[:-2]
+                    i += 1
+                    final_file += f"_{i}"
                 final_file = final_file+'/'
                 os.makedirs(final_file)
                 print(file.split('\\')[-1].split(".")[0])
@@ -171,6 +174,8 @@ class Application(tk.Frame):
                 current_file = "dm3/"+file
                 os.makedirs(final_file+'DM3_file/')
                 #shutil.move(current_file,final_file+'DM3_file/')
+                end = time.time()
+                print(f"Processing time: {(end - start):.2f} seconds")
             plt.cla()
             plt.clf()
             plt.close('all')
