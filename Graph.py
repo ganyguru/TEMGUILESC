@@ -188,11 +188,11 @@ def PlotGraph(imgname,pxsize,fftmodelname,f_shift,final_file,df,dimension_factor
         img_back = img_back.astype("uint8")
         ret, thresh = cv2.threshold(img_back,0,255,cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
         # noise removal
-        kernel = np.ones((3,3),np.uint8)
-        opening = cv2.morphologyEx(thresh,cv2.MORPH_OPEN,kernel, iterations = 1)
+        kernel = np.ones((7,7),np.uint8)
+        opening = cv2.morphologyEx(thresh,cv2.MORPH_OPEN,kernel, iterations = 2)
 
         # sure background area
-        sure_bg = cv2.dilate(opening,kernel,iterations=2)
+        sure_bg = cv2.dilate(opening,kernel,iterations=0)
         sure_bg[sure_bg!=255]=1
         sure_bg[sure_bg==255]=0
         
