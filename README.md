@@ -35,7 +35,7 @@ pip install -r requirements.txt
 6. Run the command below to generate the windows executable
 
 ```
-pyinstaller --add-data "dm3;dm3" --add-data "database.csv;." --add-data "FFTmodelv1.hdf5;." --add-data "logo.png;." --onefile --noconsole GUI_Final.py
+pyinstaller --add-data "database.csv;." --add-data "FFTmodelv1.hdf5;." --add-data "logo.png;." --onefile --noconsole GUI_Final.py
 ```
 
 7. Navigate to the `dist` directory in the project folder to see the executable file.
