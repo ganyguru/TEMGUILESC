@@ -12,10 +12,10 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v1
     
     - name: Set up Python 3.9
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v1
       with:
         python-version: '3.9.12'
     
@@ -56,8 +56,8 @@ jobs:
           --hidden-import=tensorflow.keras.models ^
           --onefile --noconsole GUI_Final.py
     
-    - name: Upload artifact
-      uses: actions/upload-artifact@v2
+    - name: Upload artifacts to GitHub
+      uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
       with:
         name: LESC-TEM-GUI
         path: dist/
@@ -82,8 +82,10 @@ jobs:
           3. Run the executable
           
           ## Supported File Formats
-          -  .dm3
-          -  .dm4
-          -  .mrc
-          -  .emd
-          -  .ser
+          - .dm3
+          - .dm4
+          - .mrc
+          - .emd
+          - .ser
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
