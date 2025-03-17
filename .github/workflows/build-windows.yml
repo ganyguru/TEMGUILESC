@@ -1,0 +1,89 @@
+name: Build Windows Executable
+
+on:
+  push:
+    tags:
+      - 'v*'  # This will trigger the workflow when you push a tag starting with 'v'
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9.12'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller
+        pip install -r requirements.txt
+    
+    - name: Create required directories
+      run: |
+        mkdir -p put_your_data_here
+        mkdir -p processed_files
+        echo "" > put_your_data_here/.placeholder
+        echo "" > processed_files/.placeholder
+        
+    - name: Build with PyInstaller
+      run: |
+        pyinstaller --add-data "database.csv;." ^
+          --add-data "FFTmodelv1.hdf5;." ^
+          --add-data "logo.png;." ^
+          --add-data "put_your_data_here/.placeholder;put_your_data_here/" ^
+          --add-data "processed_files/.placeholder;processed_files/" ^
+          --hidden-import=FFT ^
+          --hidden-import=Graph ^
+          --hidden-import=Heatmap ^
+          --hidden-import=Temporalmap ^
+          --hidden-import=PDF_export ^
+          --hidden-import=DM3lib ^
+          --hidden-import=ncempy ^
+          --hidden-import=ncempy.io ^
+          --hidden-import=ncempy.io.dm ^
+          --hidden-import=skimage ^
+          --hidden-import=skimage.transform ^
+          --hidden-import=skimage.measure ^
+          --hidden-import=tensorflow ^
+          --hidden-import=tensorflow.keras ^
+          --hidden-import=tensorflow.keras.models ^
+          --onefile --noconsole GUI_Final.py
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: LESC-TEM-GUI
+        path: dist/
+    
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          dist/GUI_Final.exe
+        draft: false
+        prerelease: false
+        name: Release ${{ github.ref_name }}
+        body: |
+          # LESC TEM GUI ${{ github.ref_name }}
+          
+          ## Installation Instructions
+          1. Download the executable file
+          2. Create two folders in the same directory as the executable:
+             - `put_your_data_here` (for input files)
+             - `processed_files` (for output)
+          3. Run the executable
+          
+          ## Supported File Formats
+          - .dm3
+          - .dm4
+          - .mrc
+          - .emd
+          - .ser
