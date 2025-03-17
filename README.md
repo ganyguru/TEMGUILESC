@@ -117,17 +117,18 @@ If you enable the console during installation or run as a Jupyter notebook:
    ```
    The executable will be created in the `dist` directory.
 
-## Image Organization for GitHub
-
-For proper image display in your README:
-
-1. Create an `images` folder in your GitHub repository
-2. Upload all workflow images to this folder
-3. Reference them in the README using relative paths as shown above
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+### Paper
+```
+@article{TEMGUILESC2025,
+  author = {Ganesh Raghavendran, Bing Han, Fortune Adekogbe, Shuang Bai, Bingyu Lu, William Wu, Minghao Zhang, Ying Shirley Meng },
+  title = {Deep learning assisted high resolution microscopy image processing for phase segmentation in functional composite materials},
+  doi = {10.48550/arXiv.2410.01928}
+}
+```
 
 ## Citation
 
@@ -135,7 +136,7 @@ If you use this software in your research, please cite:
 
 ```
 @software{TEMGUILESC,
-  author = {Your Name},
+  author = Ganesh Raghavendran,
   title = {TEM GUI LESC: A Graphical User Interface for Processing TEM Images},
   url = {https://github.com/ganyguru/TEMGUILESC},
   year = {2025},
