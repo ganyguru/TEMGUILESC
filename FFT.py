@@ -74,8 +74,7 @@ def create_fft(dm3filename,factor,final_file,df,model):
     #        f_img[i][j] = int(f_img[i][j] * (1 - (math.exp(abs(mindex-int(r/2))-int(r/2)))/math.exp(1)))
     f_img=np.subtract(f_img,s)
     f_img = f_img.clip(min=0)
-    #factor = np.resize(factor,(1024,1024))
-    f_img = np.multiply(f_img,factor)
+
     f_img = f_img.astype(int)
     maxi = f_img.max()
     maxmult = 255/maxi
