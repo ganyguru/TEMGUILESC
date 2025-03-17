@@ -82,8 +82,8 @@ jobs:
           3. Run the executable
           
           ## Supported File Formats
-          - .dm3
-          - .dm4
-          - .mrc
-          - .emd
-          - .ser
+          -  .dm3
+          -  .dm4
+          -  .mrc
+          -  .emd
+          -  .ser
