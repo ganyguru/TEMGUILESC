@@ -144,7 +144,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Citation
 
-If you use this software in your research, please cite:
+If you use this software in your research, please cite the paper:
 
 ### Paper
 ```
@@ -155,9 +155,8 @@ If you use this software in your research, please cite:
 }
 ```
 
-## Citation
 
-If you use this software in your research, please cite:
+### Software
 
 ```
 @software{TEMGUILESC,
