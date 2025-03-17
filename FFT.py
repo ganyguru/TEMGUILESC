@@ -1,19 +1,18 @@
 from __main__ import *
 from skimage.transform import resize
 import tensorflow as tf
+import cv2
 import Graph
 from Graph import PlotGraph
 from tensorflow.keras.models import load_model
 from scipy import ndimage as nd
 
-def create_fft(dm3filename,factor,final_file,df,model):
+def create_fft(dm3filename,factor,final_file,mother_folder,df,model,pxsize=0,filetype='dm',threshold_val=50,sliceno=0):
     img_dim = (1024,1024)
-    dm3f = dm3.DM3(dm3filename)
-    dm3file = dm3filename.split('\\')[-1].split(".")[0]
-    image = dm3f.imagedata
-    dimension_factor = image.shape[1]
+    dm3file=dm3filename.split(".")[0]
+       
     tem_folder =final_file+'tem' 
-    os.makedirs(tem_folder)
+    temname = tem_folder+"/"+dm3filename.split(".")[0]+"_TEM.png"
     halfft_folder =final_file+'half_fft'
     os.makedirs(halfft_folder)
     model_folder =final_file+'model'
@@ -22,29 +21,27 @@ def create_fft(dm3filename,factor,final_file,df,model):
     os.makedirs(finalfft_folder)
     os.makedirs(final_file+'mask')
     os.makedirs(final_file+'matdetails')
-    temname = tem_folder+"/"+dm3file+"_TEM.png"
-    plt.imsave(temname, image, cmap='gray')
     IMG_CHANNELS = 3
     imgsize_h = 1024
     imgsize_w = 512
-    imgsize=512
-    X_test = np.zeros((1, imgsize, imgsize, IMG_CHANNELS), dtype=np.uint8)
-    sizes_test = []
-    img = cv2.imread(temname)
-    dim = (imgsize, imgsize)
-    resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
-    #gaussian_img = nd.gaussian_filter(resized, sigma=3)
-    # resize image
-    stemname = tem_folder+"/"+dm3file+"_sTEM.png"
-    plt.imsave(stemname,resized,cmap='gray')
+#     imgsize=512
+#     X_test = np.zeros((1, imgsize, imgsize, IMG_CHANNELS), dtype=np.uint8)
+#     sizes_test = []
+#     img = cv2.imread(temname)
+#     dim = (imgsize, imgsize)
+#     resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
+#     #gaussian_img = nd.gaussian_filter(resized, sigma=3)
+#     # resize image
+#     stemname = tem_folder+"/"+dm3file+"_sTEM.png"
+#     plt.imsave(stemname,resized,cmap='gray')
  
  
     
     img = cv2.imread(temname) # load an image
+    dimension_factor = img.shape[1]
     
-    size_str = dm3f.pxsize
-    pxsize = float(size_str[0])*0.1
-    print(pxsize)
+    
+    print("Pixel Size : "+str(pxsize)+" nm/pixel")
    
     print(">>TEM image Saved")
     img = img[:,:,2] # blue channel
@@ -58,7 +55,10 @@ def create_fft(dm3filename,factor,final_file,df,model):
     f_bounded = 20 * np.log(f_abs)
     f_img = 255 * f_bounded / np.max(f_bounded)
     f_img = f_img.astype(np.uint8)
-    f_img=f_img[int(r/4):int((3*r)/4),int(r/4):int((3*r)/4)]
+    binned = False
+    if(r>2048):
+        f_img=f_img[int(r/4):int((3*r)/4),int(r/4):int((3*r)/4)]
+        binned = True
     mini = 255
     r=int(r/2)
     a= np.array(f_img[0:int((8*r)/3),0:int((8*r)/3)])
@@ -74,7 +74,8 @@ def create_fft(dm3filename,factor,final_file,df,model):
     #        f_img[i][j] = int(f_img[i][j] * (1 - (math.exp(abs(mindex-int(r/2))-int(r/2)))/math.exp(1)))
     f_img=np.subtract(f_img,s)
     f_img = f_img.clip(min=0)
-
+    factor = np.resize(factor,f_img.shape)
+    f_img = np.multiply(f_img,factor)
     f_img = f_img.astype(int)
     maxi = f_img.max()
     maxmult = 255/maxi
@@ -116,12 +117,15 @@ def create_fft(dm3filename,factor,final_file,df,model):
     
     sizes_test.append([img.shape[0], img.shape[1]])
     #img = cv2.GaussianBlur(img,(5,5),cv2.BORDER_DEFAULT)
-    img = nd.gaussian_filter(img, sigma=3)
-    plt.imsave(temp_save_h,img,cmap = 'gray')
-    img = cv2.imread(temp_save_h,0)
     img = resize(img, (IMG_HEIGHT,IMG_WIDTH), mode='constant', preserve_range=True)
+    #img = cv2.GaussianBlur(img,(3,3),cv2.BORDER_DEFAULT) #Actual***************
     
+    img = cv2.GaussianBlur(img,(3,3),cv2.BORDER_DEFAULT)
     plt.imsave(temp_save_h,img,cmap = 'gray')
+    #img = cv2.imread(temp_save_h,0)
+    
+    
+    #plt.imsave(temp_save_h,img,cmap = 'gray')
     
     img_x = cv2.imread(temp_save_h)[:,:,:IMG_CHANNELS]
     
@@ -133,7 +137,8 @@ def create_fft(dm3filename,factor,final_file,df,model):
     
     fftmodelname = model_folder +"/"+dm3file+"_FFT_model.png"
     fftfinalname = finalfft_folder +"/"+dm3file+"_FFT_final.png"
-    preds_test= (preds_test > 0.5).astype(np.uint8)
+    preds_test= (preds_test > threshold_val).astype(np.uint8)
+    print("Threshold value set is :" + str(threshold_val))
     plt.imsave(fftmodelname,(np.squeeze(preds_test[0])),cmap='gray')
     fft_half_img = cv2.imread(fftmodelname,0)
     flippedimage= cv2.flip(fft_half_img, 1)
@@ -146,11 +151,14 @@ def create_fft(dm3filename,factor,final_file,df,model):
     
     image = Image.open(fname).convert("L")
     image2 = Image.open(fname2).convert("L")
+    
     dim = (1024, 1024)
     im1 = image.resize(dim)
     arr = np.asarray(im1)
     arr2 = np.asarray(image2)
+    
     arr2 = arr2/255
+    
     final_array = arr*np.array(arr2)
     plt.imsave(fftfinalname, final_array, cmap='gray')
     
@@ -160,5 +168,5 @@ def create_fft(dm3filename,factor,final_file,df,model):
     plt.clf()
     #plt.close('all')
 
-    PlotGraph(graphinput,pxsize,fftmodelname,dft_shift,final_file,df,dimension_factor)
+    PlotGraph(graphinput,pxsize,fftmodelname,dft_shift,final_file,mother_folder,df,dimension_factor,binned)
     
