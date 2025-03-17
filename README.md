@@ -20,7 +20,9 @@ First, install the application by following the [installation instructions](#ins
 
 ### 2. Prepare Your Data
 
-Place your TEM data files (.dm3, .dm4, .mrc, .emd, .ser) in the `put_your_data_here` folder:
+**Important:** You must manually create a folder named `put_your_data_here` in the same directory as the executable before running the application.
+
+Place your TEM data files (.dm3, .dm4, .mrc, .emd, .ser) in this folder:
 
 ![Input Data Placement](images/Input_Data.png)
 *Example: Placing a .dm4 file in the input folder*
@@ -41,7 +43,9 @@ Click "Start Processing" to open the processing window where you can adjust para
 
 ### 5. View Results
 
-After processing completes, results are saved in the `processed_files` folder:
+**Important:** You must manually create a folder named `processed_files` in the same directory as the executable before running the application.
+
+After processing completes, results are saved in this folder:
 
 ![Processed Files Folder](images/Processed_Files.png)
 *Output folder structure with processed data*
@@ -56,7 +60,22 @@ Each slice directory contains comprehensive analysis data:
 ![Slice Directory](images/Slice_directory.png)
 *Contents of an individual slice directory with analysis results*
 
-### 6. Console Output (Optional)
+### 6. Visualization Outputs
+
+The application generates several visualization tools to help analyze your data:
+
+![Heatmap Visualization](images/Heatmap.png)
+*Heatmap visualization of processed TEM data*
+
+![Temporal Map](images/Temporal_map.png)
+*Temporal mapping of structural features*
+
+All visualization data is also saved as CSV files in the output directory, allowing you to:
+- Import the data into other plotting software
+- Perform additional custom analyses
+- Create publication-quality figures using your preferred tools
+
+### 7. Console Output (Optional)
 
 If you enable the console during installation or run as a Jupyter notebook:
 
@@ -69,9 +88,11 @@ If you enable the console during installation or run as a Jupyter notebook:
 
 1. Download the latest release from the [Releases](https://github.com/ganyguru/TEMGUILESC/releases) page
 2. Extract the zip file to a location of your choice
-3. Create two folders in the same directory as the executable:
+3. **Important:** Create two folders in the same directory as the executable:
    - `put_your_data_here` (for input files)
    - `processed_files` (for output)
+   
+   The application requires these exact folder names and will not create them automatically.
 4. Run the executable
 
 ### Option 2: Building from Source
@@ -117,9 +138,21 @@ If you enable the console during installation or run as a Jupyter notebook:
    ```
    The executable will be created in the `dist` directory.
 
+## Image Organization for GitHub
+
+For proper image display in your README:
+
+1. Create an `images` folder in your GitHub repository
+2. Upload all workflow images to this folder
+3. Reference them in the README using relative paths as shown above
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Citation
+
+If you use this software in your research, please cite:
 
 ### Paper
 ```
