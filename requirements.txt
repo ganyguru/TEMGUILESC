@@ -11,3 +11,4 @@ pyinstaller==6.1.0
 imageio==2.31.6
 ncempy
 seaborn
+reportlab
