@@ -35,27 +35,7 @@ jobs:
         
     - name: Build with PyInstaller
       run: |
-        pyinstaller --add-data "database.csv;." ^
-          --add-data "FFTmodelv1.hdf5;." ^
-          --add-data "logo.png;." ^
-          --add-data "put_your_data_here\.placeholder;put_your_data_here/" ^
-          --add-data "processed_files\.placeholder;processed_files/" ^
-          --hidden-import=FFT ^
-          --hidden-import=Graph ^
-          --hidden-import=Heatmap ^
-          --hidden-import=Temporalmap ^
-          --hidden-import=PDF_export ^
-          --hidden-import=DM3lib ^
-          --hidden-import=ncempy ^
-          --hidden-import=ncempy.io ^
-          --hidden-import=ncempy.io.dm ^
-          --hidden-import=skimage ^
-          --hidden-import=skimage.transform ^
-          --hidden-import=skimage.measure ^
-          --hidden-import=tensorflow ^
-          --hidden-import=tensorflow.keras ^
-          --hidden-import=tensorflow.keras.models ^
-          --onefile --noconsole GUI_Final.py
+        pyinstaller --add-data "database.csv;." --add-data "FFTmodelv1.hdf5;." --add-data "logo.png;." --add-data "put_your_data_here\.placeholder;put_your_data_here/" --add-data "processed_files\.placeholder;processed_files/" --hidden-import=FFT --hidden-import=Graph --hidden-import=Heatmap --hidden-import=Temporalmap --hidden-import=PDF_export --hidden-import=DM3lib --hidden-import=ncempy --hidden-import=ncempy.io --hidden-import=ncempy.io.dm --hidden-import=skimage --hidden-import=skimage.transform --hidden-import=skimage.measure --hidden-import=tensorflow --hidden-import=tensorflow.keras --hidden-import=tensorflow.keras.models --onefile --noconsole GUI_Final.py
     
     - name: Upload artifacts to GitHub
       uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
