@@ -12,13 +12,12 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
     
     - name: Set up Python 3.9
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v2
       with:
         python-version: '3.9.13'
-        architecture: 'x64'
     
     - name: Install dependencies
       run: |
@@ -35,13 +34,9 @@ jobs:
         
     - name: Build with PyInstaller
       run: |
-        pyinstaller --add-data "database.csv;." --add-data "FFTmodelv1.hdf5;." --add-data "logo.png;." --add-data "put_your_data_here\.placeholder;put_your_data_here/" --add-data "processed_files\.placeholder;processed_files/" --hidden-import=FFT --hidden-import=Graph --hidden-import=Heatmap --hidden-import=Temporalmap --hidden-import=PDF_export --hidden-import=DM3lib --hidden-import=ncempy --hidden-import=ncempy.io --hidden-import=ncempy.io.dm --hidden-import=skimage --hidden-import=skimage.transform --hidden-import=skimage.measure --hidden-import=tensorflow --hidden-import=tensorflow.keras --hidden-import=tensorflow.keras.models --onefile --noconsole GUI_Final.py 
-
-    - name: Upload artifacts to GitHub
-      uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
-      with:
-        name: executable
-        path: dist/
+        pyinstaller --add-data "database.csv;." --add-data "FFTmodelv1.hdf5;." --add-data "logo.png;." --add-data "put_your_data_here\.placeholder;put_your_data_here/" --add-data "processed_files\.placeholder;processed_files/" --hidden-import=FFT --hidden-import=Graph --hidden-import=Heatmap --hidden-import=Temporalmap --hidden-import=PDF_export --hidden-import=DM3lib --hidden-import=ncempy --hidden-import=ncempy.io --hidden-import=ncempy.io.dm --hidden-import=skimage --hidden-import=skimage.transform --hidden-import=skimage.measure --hidden-import=tensorflow --hidden-import=tensorflow.keras --hidden-import=tensorflow.keras.models --onefile --noconsole GUI_Final.py
+    
+    # Skip the artifact upload for now and focus on releases
     
     - name: Create Release
       if: startsWith(github.ref, 'refs/tags/')
@@ -69,4 +64,4 @@ jobs:
           - .emd
           - .ser
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
