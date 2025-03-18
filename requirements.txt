@@ -10,3 +10,4 @@ tensorflow==2.14.0
 pyinstaller==6.1.0
 imageio==2.31.6
 ncempy
+seaborn
